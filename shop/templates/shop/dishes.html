@@ -1,0 +1,35 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Меню — FoodBonus{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dish-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+    .dish-card { padding: 20px; border-radius: 14px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.08); text-align: center; }
+    .dish-image { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
+    .dish-content { padding-top: 14px; }
+    .price { color: #0c4b33; font-size: 18px; font-weight: 700; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🍕 Меню</h1>
+
+{% if dishes %}
+    <div class="dish-list">
+        {% for dish in dishes %}
+            <article class="dish-card">
+                <img class="dish-image" src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                <div class="dish-content">
+                    <h2>{{ dish.name }}</h2>
+                    <p class="price">💰 {{ dish.price }} ₽</p>
+                    <a class="button" href="/orders/create/?dish={{ dish.id }}">Заказать</a>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Блюда пока не добавлены. Зайдите в админ-панель и добавьте их.</p>
+{% endif %}
+
+{% endblock %}

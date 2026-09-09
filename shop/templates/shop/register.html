@@ -1,0 +1,30 @@
+<style>
+    .form-container { max-width: 440px; margin: 0 auto; background: white; padding: 30px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+    .form-group .error { color: #dc3545; font-size: 14px; margin-top: 5px; }
+    .form-errors { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+</style>
+
+<div class="form-container">
+    <h1>📝 Регистрация</h1>
+
+        <div class="form-errors">
+                <p>{{ error }}</p>
+        </div>
+
+    <form method="post">
+
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        
+                    <div class="error">
+                    </div>
+            </div>
+        <button class="button" type="submit" style="width:100%;">Зарегистрироваться</button>
+    </form>
+    <p style="text-align:center; margin-top:16px;">
+        Уже есть аккаунт? <a href="/login/">Войти</a>
+    </p>
+</div>
