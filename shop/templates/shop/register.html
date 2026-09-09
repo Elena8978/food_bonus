@@ -1,3 +1,8 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Регистрация — FoodBonus{% endblock %}
+
+{% block extra_css %}
 <style>
     .form-container { max-width: 440px; margin: 0 auto; background: white; padding: 30px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,.08); }
     .form-group { margin-bottom: 16px; }
@@ -5,26 +10,51 @@
     .form-group input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
     .form-group .error { color: #dc3545; font-size: 14px; margin-top: 5px; }
     .form-errors { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    .form-errors ul { margin: 0; padding-left: 20px; }
+    .button { display: inline-block; padding: 10px 16px; border: 0; border-radius: 8px; background: #0c4b33; color: #fff !important; cursor: pointer; text-decoration: none; }
+    .button:hover { background: #0a3d2a; }
 </style>
+{% endblock %}
 
+{% block content %}
 <div class="form-container">
     <h1>📝 Регистрация</h1>
 
+    {% if form.non_field_errors %}
         <div class="form-errors">
-                <p>{{ error }}</p>
+            <ul>
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
+    {% endif %}
 
     <form method="post">
+        {% csrf_token %}
 
+        {% for field in form %}
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        
+                {{ field }}
+                {% if field.errors %}
                     <div class="error">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
                     </div>
+                {% endif %}
+                {% if field.help_text %}
+                    <small style="color: #666; display: block; margin-top: 4px;">{{ field.help_text }}</small>
+                {% endif %}
             </div>
+        {% endfor %}
+
         <button class="button" type="submit" style="width:100%;">Зарегистрироваться</button>
     </form>
+
     <p style="text-align:center; margin-top:16px;">
         Уже есть аккаунт? <a href="/login/">Войти</a>
     </p>
 </div>
+{% endblock %}

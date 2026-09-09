@@ -1,0 +1,159 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Оформление заказа — FoodBonus{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+    .form-group select,
+    .form-group input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+    .form-group .help-text {
+        display: block;
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+    }
+    .form-group .error {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    .form-errors {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .bonus-info {
+        background: #e8f5e9;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #4caf50;
+    }
+    .bonus-info strong {
+        color: #0c4b33;
+    }
+    .button {
+        display: inline-block;
+        padding: 12px 24px;
+        border: 0;
+        border-radius: 8px;
+        background: #0c4b33;
+        color: #fff !important;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 16px;
+        width: 100%;
+    }
+    .button:hover {
+        background: #0a3d2a;
+    }
+    .button-secondary {
+        background: #6c757d;
+        width: auto;
+    }
+    .button-secondary:hover {
+        background: #5a6268;
+    }
+    .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+    }
+    .dish-preview {
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .dish-preview .name {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .dish-preview .price {
+        color: #0c4b33;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>🛒 Оформление заказа</h1>
+
+<div class="form-container">
+    {% if form.non_field_errors %}
+        <div class="form-errors">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if user.bonus_balance > 0 %}
+        <div class="bonus-info">
+            ⭐ Ваш баланс: <strong>{{ user.bonus_balance }} бонусов</strong>
+            <small style="display: block; margin-top: 4px;">
+                За этот заказ вы получите 5% от стоимости блюда бонусами.
+            </small>
+        </div>
+    {% endif %}
+
+    {% if form.fields.dish.initial %}
+        <div class="dish-preview">
+            <div class="name">🍽️ {{ form.fields.dish.initial.name }}</div>
+            <div class="price">💰 {{ form.fields.dish.initial.price }} ₽</div>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <span class="help-text">{{ field.help_text }}</span>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="error">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="button">✅ Подтвердить заказ</button>
+    </form>
+
+    <div style="margin-top: 16px; text-align: center;">
+        <a href="/" class="button button-secondary">← Вернуться в меню</a>
+    </div>
+</div>
+{% endblock %}

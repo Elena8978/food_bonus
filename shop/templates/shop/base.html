@@ -23,6 +23,7 @@
         .messages .info { background: #d1ecf1; color: #0c5460; }
         .messages .error { background: #f8d7da; color: #721c24; }
         .bonus-text { background: #0c4b33; color: white; padding: 2px 12px; border-radius: 20px; font-weight: bold; }
+        {% block extra_css %}{% endblock %}
     </style>
 </head>
 <body>
@@ -30,20 +31,29 @@
         <a class="logo" href="/">FoodBonus</a>
         <nav class="navigation">
             <a href="/">Меню</a>
+            {% if user.is_authenticated %}
                 <span>Пользователь: <strong>{{ user.username }}</strong></span>
                 <span class="bonus-text">⭐ {{ user.bonus_balance }} бонусов</span>
                 <a href="/orders/">Мои заказы</a>
                 <a class="button button-secondary" href="/logout/">Выйти</a>
+            {% else %}
                 <a class="button" href="/login/">Войти</a>
+                <a class="button" href="/register/">Регистрация</a>
+            {% endif %}
         </nav>
     </header>
 
     <main class="container">
+        {% if messages %}
             <ul class="messages">
+                {% for message in messages %}
                     <li class="{{ message.tags }}">{{ message }}</li>
-                
+                {% endfor %}
             </ul>
-        
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
     </main>
 </body>
 </html>

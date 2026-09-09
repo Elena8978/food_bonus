@@ -1,0 +1,37 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Мои заказы — FoodBonus{% endblock %}
+
+{% block extra_css %}
+<style>
+    .orders-list { list-style: none; padding: 0; }
+    .order-item { background: white; padding: 20px; border-radius: 14px; box-shadow: 0 4px 16px rgba(0,0,0,.08); margin-bottom: 16px; }
+    .order-item h3 { margin: 0 0 8px; }
+    .order-meta { color: #666; font-size: 14px; }
+    .empty-orders { text-align: center; padding: 40px; background: white; border-radius: 14px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>📋 Мои заказы</h1>
+
+{% if orders %}
+    <ul class="orders-list">
+        {% for order in orders %}
+            <li class="order-item">
+                <h3>🍽️ {{ order.dish.name }}</h3>
+                <div class="order-meta">
+                    💰 {{ order.dish.price }} ₽ &nbsp;|&nbsp; 
+                    🕐 {{ order.created_at|date:"d.m.Y H:i" }}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div class="empty-orders">
+        <p>😔 У вас пока нет заказов.</p>
+        <a href="/" class="button">Перейти в меню</a>
+    </div>
+{% endif %}
+
+{% endblock %}
